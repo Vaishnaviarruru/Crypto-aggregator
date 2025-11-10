@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/backoff";
 import { Token } from "../services/aggregator";
 
 export async function fetchFromDexScreener(q: string): Promise<Token[]> {

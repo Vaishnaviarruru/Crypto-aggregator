@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/backoff";
 import { Token } from "./aggregator";
 
 export async function fetchFromGeckoTerminal(): Promise<Token[]> {

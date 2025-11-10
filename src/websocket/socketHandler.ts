@@ -5,33 +5,29 @@ export function setupSocket(io: Server) {
   io.on("connection", (socket) => {
     console.log("🟢 Client connected:", socket.id);
 
-    // When client subscribes to a token (like DOGE)
+    // When a client subscribes to a token
     socket.on("subscribe", async (query: string) => {
-      console.log(`📡 Subscribed to: ${query}`);
+      console.log("📡 Subscribed to:", query);
 
-      try {
-        const result = await getAggregatedTokens(query);
-        socket.emit("tokens_update", { data: result.data });
-      } catch (err: any) {
-        console.error("❌ Failed to fetch tokens:", err.message);
-        socket.emit("error", { message: err.message });
-      }
-    });
+      // send initial data immediately
+      const result = await getAggregatedTokens(query, "-price_usd", 5);
+      socket.emit("tokens_update", result);
 
-    socket.on("disconnect", () => {
-      console.log("🔴 Client disconnected:", socket.id);
+      // send periodic updates every 15 seconds
+      const interval = setInterval(async () => {
+        const updated = await getAggregatedTokens(query, "-price_usd", 5);
+        socket.emit("tokens_update", updated);
+        console.log("🔁 Update pushed for:", query);
+      }, 15000);
+
+      // Clean up when client disconnects
+      socket.on("disconnect", () => {
+        clearInterval(interval);
+        console.log("🔴 Client disconnected:", socket.id);
+      });
     });
   });
-
-  // Send live updates every 15 seconds automatically
-  setInterval(async () => {
-    try {
-      const result = await getAggregatedTokens("doge");
-      io.emit("tokens_update", { data: result.data });
-    } catch (err: any) {
-      console.error("⚠️ Background update failed:", err.message);
-    }
-  }, 15000);
 }
+
 
 
