@@ -1,4 +1,4 @@
-#Crypto Aggregator — Real-time Data Aggregation Service
+# Crypto Aggregator — Real-time Data Aggregation Service
 
 A real-time cryptocurrency data aggregation service built with **Node.js**, **TypeScript**, and **WebSockets**.  
 It continuously fetches live token prices and metrics from **DexScreener** and **GeckoTerminal**, merges the data,  
