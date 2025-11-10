@@ -1,4 +1,4 @@
-# 🚀 Crypto Aggregator — Real-time Data Aggregation Service
+#Crypto Aggregator — Real-time Data Aggregation Service
 
 A real-time cryptocurrency data aggregation service built with **Node.js**, **TypeScript**, and **WebSockets**.  
 It continuously fetches live token prices and metrics from **DexScreener** and **GeckoTerminal**, merges the data,  
@@ -15,21 +15,21 @@ caches it using **Upstash Redis**, and streams live updates to clients via **Soc
 
 ---
 
-## 🧠 Overview
+## > Overview
 
 This project is a **backend + frontend system** for aggregating cryptocurrency data in real time.
 
-### ✨ Key Features
-- 🔁 Fetches token data from **DexScreener** and **GeckoTerminal**
-- ⚡ Combines results, filters, and caches them efficiently
-- 💾 Caches responses using **Redis (Upstash)**
-- 🔊 Streams real-time updates with **Socket.io**
-- 🧮 Supports query params like `q`, `sort`, `limit`, and `cursor`
-- 🖥️ Simple frontend dashboard to view live data
+### > Key Features
+- 1) Fetches token data from **DexScreener** and **GeckoTerminal**
+- 2) Combines results, filters, and caches them efficiently
+- 3) Caches responses using **Redis (Upstash)**
+- 4) Streams real-time updates with **Socket.io**
+- 5) Supports query params like `q`, `sort`, `limit`, and `cursor`
+- 6) Simple frontend dashboard to view live data
 
 ---
 
-## 🧩 Tech Stack
+## > Tech Stack
 
 | Layer | Technology |
 |--------|-------------|
@@ -42,7 +42,7 @@ This project is a **backend + frontend system** for aggregating cryptocurrency d
 
 ---
 
-## 📂 Project Structure
+## > Project Structure
 
 crypto-aggregator/
 ├── src/
@@ -69,7 +69,7 @@ crypto-aggregator/
 
 ---
 
-## ⚙️ Environment Variables
+## > Environment Variables
 
 Create a `.env` file in your project root with the following:
 
@@ -79,21 +79,21 @@ REDIS_URL=rediss://default:<your_upstash_redis_url>
 CACHE_TTL_SECONDS=30
 DEFAULT_QUERY=doge
 
-⚙️ Running Locally
+> Running Locally
 bash
 
-# 1️⃣ Clone the repository
+# 1️ Clone the repository
 git clone https://github.com/Vaishnaviarruru/Crypto-aggregator.git
 cd Crypto-aggregator
 
-# 2️⃣ Install dependencies
+# 2️ Install dependencies
 npm install
 
-# 3️⃣ Create the .env file
+# 3️ Create the .env file
 cp .env.example .env
 # (or manually create .env using the values above)
 
-# 4️⃣ Start the development server
+# 4️ Start the development server
 npm run dev
 Now open your browser:
 
@@ -101,12 +101,12 @@ Dashboard: http://localhost:3000
 
 API Endpoint: http://localhost:3000/tokens?q=doge
 
-👩‍💻 Author
+> Author
 Vaishnavi Arruru
-💼 GitHub Profile
 
-✅ Status
-Feature	Status
+
+> Status
+Feature	Status ✅
 API /tokens working	✅
 Redis caching (Upstash)	✅
 WebSocket real-time updates	✅
