@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crypto Aggregator Dashboard</title>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0d1117; color: #eee; text-align: center; }
+    h1 { color: #00ff99; }
+    table { margin: 20px auto; border-collapse: collapse; width: 80%; }
+    th, td { border: 1px solid #444; padding: 8px; }
+    th { background: #222; color: #00ffcc; }
+  </style>
+</head>
+<body>
+  <h1>🐶 Live Token Dashboard</h1>
+  <p>Tracking: <b>DOGE</b></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Ticker</th>
+        <th>Price (USD)</th>
+        <th>Volume (USD)</th>
+        <th>24h Change (%)</th>
+        <th>Protocol</th>
+      </tr>
+    </thead>
+    <tbody id="tokenTable"></tbody>
+  </table>
+
+  <script>
+    const socket = io("http://localhost:3000");
+    const table = document.getElementById("tokenTable");
+
+    socket.on("connect", () => {
+      console.log("✅ Connected to backend");
+      socket.emit("subscribe", "doge");
+    });
+
+    socket.on("tokens_update", res => {
+      const { data } = res;
+      console.clear();
+      console.log("📡 Live update received:", data);
+      table.innerHTML = data.map(t => `
+        <tr>
+          <td>${t.token_name}</td>
+          <td>${t.token_ticker}</td>
+          <td>$${t.price_usd?.toFixed(6) ?? "N/A"}</td>
+          <td>${t.volume_usd?.toLocaleString() ?? "N/A"}</td>
+          <td>${t.price_24h_change ?? 0}%</td>
+          <td>${t.protocol}</td>
+        </tr>
+      `).join("");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crypto Aggregator Dashboard</title>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <style>
+     body {
+    font-family: Arial, sans-serif;
+    background: #0d1117;
+    color: #eee;
+    text-align: center;
+  }
+  h1 {
+    color: #00ff99;
+  }
+  table {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 80%;
+  }
+  th, td {
+    border: 1px solid #444;
+    padding: 8px;
+  }
+  th {
+    background: #222;
+    color: #00ffcc;
+  }
+
+  /* Animation classes */
+  .price-up {
+    animation: greenFlash 1s ease;
+  }
+  .price-down {
+    animation: redFlash 1s ease;
+  }
+
+  @keyframes greenFlash {
+    from { background-color: rgba(0,255,0,0.4); }
+    to { background-color: transparent; }
+  }
+  @keyframes redFlash {
+    from { background-color: rgba(255,0,0,0.4); }
+    to { background-color: transparent; }
+  }
+  </style>
+</head>
+<body>
+  <h1>🐶 Live Token Dashboard</h1>
+  <p>
+  Tracking:
+  <select id="tokenSelect">
+    <option value="doge">DOGE</option>
+    <option value="btc">BTC</option>
+    <option value="eth">ETH</option>
+    <option value="sol">SOL</option>
+    <option value="pepe">PEPE</option>
+  </select>
+</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Ticker</th>
+        <th>Price (USD)</th>
+        <th>Volume (USD)</th>
+        <th>24h Change (%)</th>
+        <th>Protocol</th>
+      </tr>
+    </thead>
+    <tbody id="tokenTable"></tbody>
+  </table>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script>
+  const socket = io("http://localhost:3000");
+  const table = document.getElementById("tokenTable");
+  const tokenSelect = document.getElementById("tokenSelect");
+  let currentQuery = tokenSelect.value;
+  let previousPrices = {};
+
+  socket.on("connect", () => {
+    console.log("✅ Connected to backend");
+    socket.emit("subscribe", currentQuery);
+  });
+
+  // When dropdown changes, resubscribe to a new token
+  tokenSelect.addEventListener("change", () => {
+    currentQuery = tokenSelect.value;
+    previousPrices = {}; // reset old prices
+    console.log("🔄 Switching to:", currentQuery.toUpperCase());
+    socket.emit("subscribe", currentQuery);
+  });
+
+  socket.on("tokens_update", (res) => {
+    const { data } = res;
+    console.clear();
+    console.log("📡 Live update for:", currentQuery, data);
+
+    table.innerHTML = data.map((t) => {
+      const oldPrice = previousPrices[t.token_address];
+      const price = t.price_usd ?? 0;
+      let rowClass = "";
+
+      if (oldPrice !== undefined) {
+        if (price > oldPrice) rowClass = "price-up";
+        else if (price < oldPrice) rowClass = "price-down";
+      }
+
+      previousPrices[t.token_address] = price;
+
+      return `
+        <tr class="${rowClass}">
+          <td>${t.token_name}</td>
+          <td>${t.token_ticker}</td>
+          <td>$${price.toFixed(6)}</td>
+          <td>${t.volume_usd?.toLocaleString() ?? "N/A"}</td>
+          <td>${t.price_24h_change ?? 0}%</td>
+          <td>${t.protocol}</td>
+        </tr>
+      `;
+    }).join("");
+  });
+</script>
+
+ 
+
+</body>
+</html>
