@@ -6,11 +6,11 @@ caches it using **Upstash Redis**, and streams live updates to clients via **Soc
 
 ---
 
-## 🌐 Live Demo
+## > Live Demo
 
-🖥️ **Dashboard:** [https://crypto-aggregator-msa2.onrender.com](https://crypto-aggregator-msa2.onrender.com)
+**Dashboard:** [https://crypto-aggregator-msa2.onrender.com](https://crypto-aggregator-msa2.onrender.com)
 
-📡 **API Example:**  
+**API Example:**  
 [https://crypto-aggregator-msa2.onrender.com/tokens?q=doge](https://crypto-aggregator-msa2.onrender.com/tokens?q=doge)
 
 ---
